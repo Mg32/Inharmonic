@@ -1,0 +1,9 @@
+# CMake builds
+build/
+
+# REAPER backups
+Backups/
+
+# Others
+desktop.ini
+.DS_Store
