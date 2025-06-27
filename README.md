@@ -1,6 +1,8 @@
 # Inharmonic
 
-<p style="text-align: center">A shiny synthesizer like a piano.</p>
+*A shiny synthesizer like a piano.*
+
+![A screenshot of Inharmonic synthesizer.](document/inharmonic.png)
 
 The *Inharmonic* simulates the overtone characteristics of acoustic pianos. It's possible to synthesize more natural (physics-oriented) inharmonic sounds that FM synthesis could not.
 
