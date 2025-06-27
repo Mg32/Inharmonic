@@ -26,6 +26,7 @@ GPLv3 (due to VST3SDK). The main codes (source/dsp/*.h) are MIT License.
 ## Notes (for Geeks)
 
 The *Inharmonic* uses sinusoidal additive synthesis to generate overtones. According to [H. Fletcher (1964)](https://doi.org/10.1121/1.1918933), the $n$-th overtone frequencies $f_n ~(n=1, 2, \dots)$ can be modeled as
+
 $$
 f_n = n f_0 \sqrt{1 + Bn^2} \approx n f_0 \,(1 + B n^2 / 2)
 $$
