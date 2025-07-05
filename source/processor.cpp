@@ -4,7 +4,6 @@
 #include "parameters.h"
 
 #include "base/source/fstreamer.h"
-#include "pluginterfaces/vst/ivstevents.h"
 #include "pluginterfaces/vst/ivstparameterchanges.h"
 
 using namespace Steinberg;
@@ -238,26 +237,14 @@ tresult PLUGIN_API InharmonicProcessor::process(Vst::ProcessData &data) {
   }
 
   // Event processing
+  _scheduledEvents.clear();
   Vst::IEventList *eventList = data.inputEvents;
   if (eventList != NULL) {
     int32 numEvent = eventList->getEventCount();
     for (int32 i = 0; i < numEvent; i++) {
       Vst::Event event;
       if (eventList->getEvent(i, event) == kResultOk) {
-        switch (event.type) {
-        case Vst::Event::kNoteOnEvent:
-          if (event.noteOn.velocity != 0)
-            _synth.noteOn(event.noteOn.channel, event.noteOn.pitch,
-                          event.noteOn.velocity);
-          else
-            _synth.noteOff(event.noteOn.channel, event.noteOn.pitch,
-                           event.noteOn.velocity);
-          break;
-        case Vst::Event::kNoteOffEvent:
-          _synth.noteOff(event.noteOff.channel, event.noteOff.pitch,
-                         event.noteOff.velocity);
-          break;
-        }
+        _scheduledEvents.insert({event.sampleOffset, event});
       }
     }
   }
@@ -271,8 +258,28 @@ tresult PLUGIN_API InharmonicProcessor::process(Vst::ProcessData &data) {
       Vst::Sample32 *outL = data.outputs[0].channelBuffers32[0];
       Vst::Sample32 *outR = data.outputs[0].channelBuffers32[1];
 
-      // process sample-by-sample
       for (int32 i = 0; i < data.numSamples; i++) {
+        // event processing
+        auto range = _scheduledEvents.equal_range(i);
+        for (auto it = range.first; it != range.second; it++) {
+          auto &event = it->second;
+          switch (event.type) {
+          case Vst::Event::kNoteOnEvent:
+            if (event.noteOn.velocity != 0)
+              _synth.noteOn(event.noteOn.channel, event.noteOn.pitch,
+                            event.noteOn.velocity);
+            else
+              _synth.noteOff(event.noteOn.channel, event.noteOn.pitch,
+                             event.noteOn.velocity);
+            break;
+          case Vst::Event::kNoteOffEvent:
+            _synth.noteOff(event.noteOff.channel, event.noteOff.pitch,
+                           event.noteOff.velocity);
+            break;
+          }
+        }
+
+        // process sample-by-sample
         _synth.process32(outL[i], outR[i]);
         _biquadEQ32.process(outL[i], outR[i]);
         _chorus32.process(outL[i], outR[i]);
@@ -285,8 +292,28 @@ tresult PLUGIN_API InharmonicProcessor::process(Vst::ProcessData &data) {
       Vst::Sample64 *outL = data.outputs[0].channelBuffers64[0];
       Vst::Sample64 *outR = data.outputs[0].channelBuffers64[1];
 
-      // process sample-by-sample
       for (int32 i = 0; i < data.numSamples; i++) {
+        // event processing
+        auto range = _scheduledEvents.equal_range(i);
+        for (auto it = range.first; it != range.second; it++) {
+          auto &event = it->second;
+          switch (event.type) {
+          case Vst::Event::kNoteOnEvent:
+            if (event.noteOn.velocity != 0)
+              _synth.noteOn(event.noteOn.channel, event.noteOn.pitch,
+                            event.noteOn.velocity);
+            else
+              _synth.noteOff(event.noteOn.channel, event.noteOn.pitch,
+                             event.noteOn.velocity);
+            break;
+          case Vst::Event::kNoteOffEvent:
+            _synth.noteOff(event.noteOff.channel, event.noteOff.pitch,
+                           event.noteOff.velocity);
+            break;
+          }
+        }
+
+        // process sample-by-sample
         _synth.process64(outL[i], outR[i]);
         _biquadEQ64.process(outL[i], outR[i]);
         _chorus64.process(outL[i], outR[i]);
