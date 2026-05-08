@@ -25,7 +25,7 @@ The VST3 is available at the [Release](https://github.com/Mg32/inharmonic-vst3/r
 
 ## License
 
-GPLv3 (due to VST3SDK). The main codes (source/dsp/*.h) are MIT License.
+MIT License (after VST3SDK 3.8.0).
 
 ## Notes (for Geeks)
 

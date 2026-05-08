@@ -14,7 +14,7 @@ project(Inharmonic
     # This is your plug-in version number. Change it here only.
     # Version number symbols usable in C++ can be found in
     # source/version.h and ${PROJECT_BINARY_DIR}/projectversion.h.
-    VERSION 1.0.0.0
+    VERSION 1.0.1.0
     DESCRIPTION "Inharmonic VST 3 Plug-in"
 )
 
@@ -71,8 +71,8 @@ elseif(SMTG_WIN)
         resource/win32resource.rc
     )
     if(MSVC)
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Os /fp:fast /w04103 -Wno-pragma-pack")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Os /fp:fast /w04103 -Wno-pragma-pack")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Os /fp:fast")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Os /fp:fast")
         set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Inharmonic)
         smtg_target_set_debug_executable(Inharmonic
             "$(ProgramFiles)/Steinberg/VST3PluginTestHost/VST3PluginTestHost.exe"
