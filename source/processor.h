@@ -66,7 +66,7 @@ protected:
   Effect::Reverb<double> _reverb64;
 
   std::map<Steinberg::Vst::ParamID, Steinberg::Vst::ParamValue> _param = {};
-  std::map<Steinberg::int32, Steinberg::Vst::Event> _scheduledEvents = {};
+  std::multimap<Steinberg::int32, Steinberg::Vst::Event> _scheduledEvents = {};
 
   void applyParameter(Steinberg::Vst::ParamID tag,
                       Steinberg::Vst::ParamValue value);
