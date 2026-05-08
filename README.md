@@ -16,7 +16,7 @@ The *Inharmonic* simulates the overtone characteristics of acoustic pianos. It's
 
 ## Downloads
 
-The VST3 is available at the [Release](https://github.com/Mg32/inharmonic-vst3/releases) page.
+The VST3 is available at the [Release](https://github.com/Mg32/inharmonic/releases) page.
 
 ## Installation (Windows)
 
