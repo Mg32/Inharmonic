@@ -21,7 +21,6 @@ jobs:
         include:
           - os: windows-latest
             configure_options: -G "Visual Studio 17 2022" -A x64 -T ClangCL
-            target_triplet: x64-windows-static-md
             project_name: Inharmonic.vst3
             artifact_name: Inharmonic_vst3_windows_x64.zip
 
@@ -33,12 +32,13 @@ jobs:
       - name: Configure CMake
         run: >
           cmake
+          -S .
+          -B build
           ${{ matrix.configure_options }}
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-          -DVCPKG_TARGET_TRIPLET=${{ matrix.target_triplet }}
 
       - name: Build with CMake
-        run: cmake --build build --config Release
+        run: cmake --build build --config ${{ matrix.build_type }}
 
       - name: Create artifacts
         shell: bash
@@ -46,7 +46,11 @@ jobs:
           ls  '${{github.workspace}}/build'
           if [[ "${{ matrix.os }}" == "windows-latest" ]]
           then
-            7z a ${{ matrix.artifact_name }} '${{github.workspace}}/build/VST3/Release/${{ matrix.project_name }}'
+            mkdir -p '${{github.workspace}}/package'
+            cp -R '${{github.workspace}}/build/VST3/${{ matrix.build_type }}/${{ matrix.project_name }}' '${{github.workspace}}/package/'
+            cp -R '${{github.workspace}}/VST3 Presets' '${{github.workspace}}/package/'
+            cd '${{github.workspace}}/package'
+            7z a '${{github.workspace}}/${{ matrix.artifact_name }}' *
           fi
           ls
 
